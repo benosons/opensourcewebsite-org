@@ -39,13 +39,11 @@ $this->params['breadcrumbs'][] = '#' . $model->id;
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                         <h6 class="dropdown-header"><?= $model->getAttributeLabel('Status') ?></h6>
-
                                         <a class="dropdown-item status-update <?= $model->isActive() ? 'active' : '' ?>"
                                            href="#"
                                            data-value="<?= Vacancy::STATUS_ON ?>">
                                             <?= Yii::t('app', 'Active') ?>
                                         </a>
-
                                         <a class="dropdown-item status-update <?= $model->isActive() ? '' : 'active' ?>"
                                            href="#"
                                            data-value="<?= Vacancy::STATUS_OFF ?>">
@@ -72,9 +70,9 @@ $this->params['breadcrumbs'][] = '#' . $model->id;
                             'attributes' => [
                                 'id',
                                 'name',
+                                'responsibilities:ntext',
                                 'requirements:ntext',
                                 'conditions:ntext',
-                                'responsibilities:ntext',
                                 [
                                     'label' => Yii::t('app', 'Keywords'),
                                     'visible' => (bool)$model->keywords,
@@ -162,38 +160,40 @@ $this->params['breadcrumbs'][] = '#' . $model->id;
                         ]);?>
                     </div>
                 </div>
+                <?php if ($model->languages): ?>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <div id="w0" class="grid-view">
                             <table class="table table-condensed table-hover" style="margin-bottom: 0;">
                                 <tbody>
-                                <?php
-                                array_map(function ($vacancyLanguage) {
-                                    echo '<tr><td>' . $vacancyLanguage->getLabel() . '</td><td>';
-                                    echo ModalAjax::widget([
-                                        'id' => 'change-language' . $vacancyLanguage->language_id,
-                                        'header' => Yii::t('user', 'Edit language'),
-                                        'toggleButton' => [
-                                            'label' => Html::icon('edit'),
-                                            'title' => Yii::t('app', 'Edit'),
-                                            'class' => 'btn btn-light edit-btn',
-                                            'style' =>  [
-                                                'float' => 'right',
+                                <?php foreach ($model->languages as $vacancyLanguage) : ?>
+                                    <tr>
+                                        <td><?= $vacancyLanguage->getLabel() ?></td>
+                                        <td><?= ModalAjax::widget([
+                                            'id' => 'change-language' . $vacancyLanguage->language_id,
+                                            'header' => Yii::t('user', 'Edit language'),
+                                            'toggleButton' => [
+                                                'label' => Html::icon('edit'),
+                                                'title' => Yii::t('app', 'Edit'),
+                                                'class' => 'btn btn-light edit-btn',
+                                                'style' =>  [
+                                                    'float' => 'right',
+                                                ],
                                             ],
-                                        ],
-                                        'url' => Url::to([
-                                            'vacancy/change-language',
-                                            'id' => $vacancyLanguage->id,
-                                            'vacancyId' => $vacancyLanguage->vacancy_id,
-                                        ]),
-                                    ]);
-                                    echo '</td></tr>';
-                                }, $model->languagesWithLevels); ?>
+                                            'url' => Url::to([
+                                                'vacancy/change-language',
+                                                'id' => $vacancyLanguage->id,
+                                                'vacancyId' => $vacancyLanguage->vacancy_id,
+                                            ]),
+                                        ]); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -210,14 +210,28 @@ $this->params['breadcrumbs'][] = '#' . $model->id;
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <?= DetailView::widget([
-                                'model' => $model->company,
+                                'model' => $company = $model->company,
                                 'attributes' => [
                                     'id',
-                                    'name',
-                                    'url:url',
-                                    'address',
-                                    'description:ntext',
-                                ]
+                                    [
+                                        'attribute' => 'name',
+                                        'visible' => (bool)$company->name,
+                                    ],
+                                    [
+                                        'attribute' => 'url',
+                                        'visible' => (bool)$company->url,
+                                        'format' => 'url',
+                                    ],
+                                    [
+                                        'attribute' => 'address',
+                                        'visible' => (bool)$company->address,
+                                    ],
+                                    [
+                                        'attribute' => 'description',
+                                        'visible' => (bool)$company->description,
+                                        'format' => 'ntext',
+                                    ],
+                                ],
                             ]) ?>
                         </div>
                     </div>

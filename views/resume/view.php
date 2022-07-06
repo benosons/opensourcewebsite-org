@@ -38,13 +38,11 @@ $this->params['breadcrumbs'][] = '#' . $model->id;
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                         <h6 class="dropdown-header"><?= $model->getAttributeLabel('Status') ?></h6>
-
                                         <a class="dropdown-item status-update <?= $model->isActive() ? 'active' : '' ?>"
                                            href="#"
                                            data-value="<?= Resume::STATUS_ON ?>">
                                             <?= Yii::t('app', 'Active') ?>
                                         </a>
-
                                         <a class="dropdown-item status-update <?= $model->isActive() ? '' : 'active' ?>"
                                            href="#"
                                            data-value="<?= Resume::STATUS_OFF ?>">
@@ -128,6 +126,33 @@ $this->params['breadcrumbs'][] = '#' . $model->id;
                                 ],
                             ]
                         ]) ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="languages-index">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><?= Yii::t('jo', 'Available languages'); ?></h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <div id="w0" class="grid-view">
+                            <table class="table table-condensed table-hover" style="margin-bottom: 0;">
+                                <tbody>
+                                <?php foreach ($model->user->languages as $userLanguage) : ?>
+                                    <tr>
+                                        <td><?= $userLanguage->getLabel() ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
