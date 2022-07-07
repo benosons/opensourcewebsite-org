@@ -37,6 +37,11 @@ class SignupForm extends Model
             ['password', 'string', 'min' => 6],
             ['password_repeat', 'string'],
             ['password_repeat', 'compare', 'compareAttribute' => 'password', 'skipOnEmpty' => false],
+            [
+                'username',
+                'match', 'not' => true, 'pattern' => '/[^a-zA-Z0-9_]/',
+                'message' => 'Username can contain only letters, numbers and _ symbols.',
+            ]
         ];
     }
 
